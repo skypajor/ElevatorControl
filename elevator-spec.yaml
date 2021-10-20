@@ -1,0 +1,188 @@
+openapi: 3.0.0
+info:
+  title: Elevator Control
+  description: 'This is a sample server Elevator Control server. Elevators can have multiple banks but currently not modeled in this API. One elevator can have many cars, and each car can have multiple call and stop requests.'
+  version: 1.0.0
+servers:
+- url: http://localhost:8081/
+tags:
+- name: elevator
+  description: The elevator API 
+paths:
+  /elevator/{elevatorId}:
+    get:
+      tags:
+      - elevator
+      summary: Find elevator by ID
+      description: Returns a single elvator
+      operationId: getElevatorById
+      parameters:
+      - name: elevatorId
+        in: path
+        description: ID of the elevator to return
+        required: true
+        schema:
+          type: integer
+          format: int64 
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Elevator'
+        404:
+          description: Elevator not found
+          content: {} 
+  /elevator/{elevatorId}/car/{carId}/stopRequest:
+    post:
+      tags:
+      - elevator
+      summary: Makes a stop request
+      operationId: createStopRequest
+      parameters:
+      - name: elevatorId
+        in: path
+        description: ID of the elevator
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: carId
+        in: path
+        description: ID of the elevator car
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Stop Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StopRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StopRequest'
+        503:
+          description: Car out of service
+          content: {} 
+        404:
+          description: Car not found
+          content: {}
+  /elevator/{elevatorId}/car/{carId}/callRequest:
+    post:
+      tags:
+      - elevator
+      summary: Makes a call request
+      operationId: createCallRequest
+      parameters:
+      - name: elevatorId
+        in: path
+        description: ID of the elevator
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: carId
+        in: path
+        description: ID of the elevator car
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        description: Call Request
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallRequest'
+      responses:
+        200:
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRequest'
+        503:
+          description: Car out of service
+          content: {} 
+        404:
+          description: Car not found
+          content: {}
+components:
+  schemas:
+    Elevator:
+      required:
+      - topFloor
+      - bottomFloor
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        topFloor:
+          type: integer
+          format: int64
+          example: 6
+        bottomFloor:
+          type: integer
+          format: int64
+          example: 1
+        cars:
+          type: array
+          items:
+            $ref: '#/components/schemas/Car'
+    Car:
+      required:
+      - currentFloor  
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        currentFloor:
+          type: integer
+          format: int64
+          example: 2
+        nextFloor:
+          type: integer
+          format: int64
+          example: 4
+        stopRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/StopRequest'
+        callRequests:
+          type: array
+          items:
+            $ref: '#/components/schemas/CallRequest'
+    StopRequest:
+      required:
+      - gotoFloor
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        gotoFloor:
+          type: integer
+          format: int64
+          example: 2
+    CallRequest:
+      required:
+      - gotoFloor
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        gotoFloor:
+          type: integer
+          format: int64
+          example: 2
+ 

@@ -1,0 +1,35 @@
+plugin: openapi 
+specFile: elevator-spec.yaml
+
+resources:
+- path: "/elevator/1"
+  method: GET
+  response:
+    staticFile: elevator1.json
+    statusCode: 200
+
+- path: "/elevator/2"
+  method: GET
+  response:
+    statusCode: 404
+
+- path: "/elevator/2/car/1/stopRequest"
+  method: POST
+  response:
+    statusCode: 404
+
+- path: "/elevator/2/car/2/stopRequest"
+  method: POST
+  response:
+    statusCode: 503
+
+- path: "/elevator/2/car/1/callRequest"
+  method: POST
+  response:
+    statusCode: 404
+
+- path: "/elevator/2/car/2/callRequest"
+  method: POST
+  response:
+    statusCode: 503
+

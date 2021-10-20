@@ -1,0 +1,23 @@
+{
+  "id": 1,
+  "topFloor": 20,
+  "bottomFloor": 1,
+  "cars": [
+    {
+      "id": 0,
+      "currentFloor": 2,
+      "nextFloor": 12,
+      "stopRequests": [
+        {
+          "id": 0,
+          "gotoFloor": 15 
+        }
+      ],
+      "callRequests": [
+        {
+          "id": 0,
+          "gotoFloor": 12
+        }
+      ]
+    }
+}
